@@ -25,7 +25,7 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <form class="form-horizontal" role="form">
+            <form class="form-horizontal" role="form" action="http://localhost/ProjetoWEB/Controlador" method="post">
               <div class="form-group">
                 <div class="col-sm-3">
                   <label for="inputCPF" class="control-label">Informar o CPF:</label>
@@ -51,6 +51,8 @@
                 </div>
               </div>
               
+                  <input type="hidden" name="idformulario" value="3">
+                  <input type="hidden" name="tipoformulario" value="34">
                   <button type="submit" class="btn btn-danger">Alterar</button>
                
             </form>
