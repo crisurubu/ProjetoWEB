@@ -1,3 +1,4 @@
+<jsp:include page="../util/topo.jsp"/>
 <html><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,7 +26,7 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <form class="form-horizontal" role="form" action="http://localhost/ProjetoWEB/Controlador" method="post">
+            <form class="form-horizontal" role="form" action="http://localhost/ProjetoWEB/autenticacao.jsp" method="post">
               <div class="form-group">
                 <div class="col-sm-3">
                   <label for="inputCPF" class="control-label">Informar o CPF:</label>
