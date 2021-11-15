@@ -1,4 +1,4 @@
-<jsp:include page="../util/topo.jsp"/>
+<jsp:include page="../util/topo.jsp" />
 <html><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,8 +23,8 @@
           <div class="col-md-12 text-center">
             <h3 class="tt_menu">&gt;&gt; PAGAMENTOS &lt;&lt;</h3>
             <div class="col-md-12  btn-group btn-group-lg btn-group-vertical">
-              <a href="consultaTodos.jsp" class="btn btn-default">Consultar Todos os Pagamentos</a>
-              <a href="consulta.jsp" class="btn btn-default">Consultar um Pagamento Especifico</a>
+              <a href="http://localhost/ProjetoWEB/Controlador?idformulario=3&tipoformulario=31" class="btn btn-default">Consultar Todos os Pagamentos</a>
+              <a href="consulta.jsp" class="btn btn-default">Consultar um Pagamento Específico</a>
               <a href="cadastro.jsp" class="btn btn-default">Cadastrar um Novo Pagamento</a>
               <a href="alteracao.jsp" class="btn btn-default">Alterar um Pagamento</a>
               <a href="exclusao.jsp" class="btn btn-default">Excluir um Pagamento</a>
@@ -37,7 +37,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12 text-center corrigir">
-            <a class="btn btn-default" href="javascript:window.history.go(-1)">Voltar</a>
+            <a class="btn btn-default" href="../index.jsp">Voltar</a>
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@
       <div class="navbar navbar-fixed-bottom bgred">
         <div class="container">
           <div class="row">
-            <div class="col-sm-12 text-center" style="top:13px;color:#fff;">Â© ABCTreinamentos - Curso de Java 8 para Web</div>
+            <div class="col-sm-12 text-center" style="top:13px;color:#fff;">© ABCTreinamentos - Curso de Java para Web</div>
           </div>
         </div>
       </div>

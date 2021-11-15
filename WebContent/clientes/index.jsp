@@ -23,7 +23,7 @@
           <div class="col-md-12 text-center">
             <h3 class="tt_menu">&gt;&gt; CLIENTES &lt;&lt;</h3>
             <div class="col-md-12  btn-group btn-group-lg btn-group-vertical">
-              <a href="consultaTodos.jsp" class="btn btn-default">Consultar Todos os Clientes</a>
+              <a href="http://localhost/ProjetoWEB/Controlador?idformulario=1&tipoformulario=11" class="btn btn-default">Consultar Todos os Clientes</a>
               <a href="consulta.jsp" class="btn btn-default">Consultar um Cliente Especifico</a>
               <a href="cadastro.jsp" class="btn btn-default">Cadastrar um Novo Cliente</a>
               <a href="alteracao.jsp" class="btn btn-default">Alterar um Cliente</a>
@@ -37,7 +37,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12 text-center corrigir">
-            <a class="btn btn-default" href="javascript:window.history.go(-1)">Voltar</a>
+            <a class="btn btn-default" href="../index.jsp">Voltar</a>
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@
       <div class="navbar navbar-fixed-bottom bgred">
         <div class="container">
           <div class="row">
-            <div class="col-sm-12 text-center" style="top:13px;color:#fff;"> ABCTreinamentos - Curso de Java 8 para Web</div>
+            <div class="col-sm-12 text-center" style="top:13px;color:#fff;"> © ABCTreinamentos - Curso de Java para Web</div>
           </div>
         </div>
       </div>

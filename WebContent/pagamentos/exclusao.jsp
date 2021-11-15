@@ -1,4 +1,4 @@
-<jsp:include page="../util/topo.jsp"/>
+<jsp:include page="../util/topo.jsp" />
 <html><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,10 +26,10 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <form class="form-horizontal" role="form" action="http://localhost/ProjetoWEB/autenticacao.jsp" method="post">
+            <form class="form-horizontal" role="form" action="http://localhost/ProjetoWEB/Controlador" method="post">
               <div class="form-group">
                 <div class="col-sm-3">
-                  <label for="inputCPF" class="control-label">Informar o CPF a ser EXCLU√çDO::</label>
+                  <label for="inputCPF" class="control-label">Informar o CPF a ser EXCLUÕDO:</label>
                 </div>
                 <div class="col-sm-9">
                   <input type="text" name="cpf" class="form-control" id="inputCPF" placeholder="CPF" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Digite um CPF no formato: xxx.xxx.xxx-xx" required>
@@ -37,16 +37,15 @@
               </div>
               <div class="form-group">
                 <div class="col-sm-3">
-                  <label for="inputCURSO" class="control-label">Informar o CURSO a ser EXCLU√çDO:</label>
+                  <label for="inputCURSO" class="control-label">Informar o CURSO a ser EXCLUÕDO:</label>
                 </div>
                 <div class="col-sm-9">
                   <input type="number" name="cdcurso" class="form-control" id="inputCURSO" placeholder="CURSO" required>
                 </div>
               </div>
-              	<input type="hidden" name="idformulario" value="3">
-                <input type="hidden" name="tipoformulario" value="35">
-                <button type="submit" class="btn btn-danger">Excluir</button>
-               
+              <input type="hidden" name="idformulario" value="3">
+              <input type="hidden" name="tipoformulario" value="35">
+              <button type="submit" class="btn btn-danger">Excluir</button>             
             </form>
           </div>
         </div>
@@ -56,7 +55,7 @@
       <div class="navbar navbar-fixed-bottom bgred">
         <div class="container">
           <div class="row">
-            <div class="col-sm-12 text-center" style="top:13px;color:#fff;">¬© ABCTreinamentos - Curso de Java 8 para Web</div>
+            <div class="col-sm-12 text-center" style="top:13px;color:#fff;">© ABCTreinamentos - Curso de Java para Web</div>
           </div>
         </div>
       </div>

@@ -24,11 +24,11 @@
         <div class="row text-center">
           <div class="col-md-12 text-center">
             <h1 class="text-center">${mensagem}</h1>
-            <c:if test="${curso != null}">
-            	<h3 class="text-center">Cdcurso:${curso.cdcurso}</h3>
-            	<h3 class="text-center">Nome:${curso.nome}</h3>
-            	<h3 class="text-center">Valor:${curso.valor}</h3>
-            	<h3 class="text-center">Url:${curso.url}</h3>
+            <c:if test="${pagamento != null}">
+            	<h3 class="text-center">Cpf:${pagamento.id.cpf}</h3>
+            	<h3 class="text-center">Cdcurso:${pagamento.id.cdcurso}</h3>
+            	<h3 class="text-center">Data de Inscrição:${pagamento.datainscricao}</h3>
+            	
             </c:if>
           </div>
         </div>
@@ -38,7 +38,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12 text-center">
-           <a class="btn btn-default" href="index.jsp">Retornar ao Menu Curso</a>
+           <a class="btn btn-default" href="index.jsp">Retornar ao Menu Pagamento</a>
           </div>
         </div>
       </div>

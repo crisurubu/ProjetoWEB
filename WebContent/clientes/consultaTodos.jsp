@@ -1,4 +1,5 @@
-<jsp:include page="../util/topo.jsp"/>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:include page="../util/topo.jsp" />
 <html><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +8,7 @@
     <link href="../lib/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="../lib/css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="../lib/css/padrao.css" rel="stylesheet" type="text/css">
+  	<title>Página de Consulta - Todos os Clientes</title>
   </head><body>
     <div class="section section-danger text-justify">
       <div class="container">
@@ -21,29 +23,42 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12 text-center">
-            <h3 class="tt_menu">&gt;&gt; CLIENTES - EXCLUIR UM CLIENTE &lt;&lt;</h3>
+            <h3 class="tt_menu">&gt;&gt; CLIENTES - CONSULTAR TODOS OS CLIENTES &lt;&lt;</h3>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <form class="form-horizontal" role="form" action="http://localhost/ProjetoWEB/Controlador" method="post">
-              <div class="form-group">
-                <div class="col-sm-3">
-                  <label for="inputCPF" class="control-label">Informar o CPF a ser Excluido:</label>
-                </div>
-                <div class="col-sm-9">
-                  <input type="text" name="cpf" class="form-control" id="inputCPF" placeholder="CPF" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Digite um CPF no formato: xxx.xxx.xxx-xx" required>
-                </div>
-              </div>
-                  <input type="hidden" name="idformulario" value="1">
-                  <input type="hidden" name="tipoformulario" value="15">
-                  <button type="submit" class="btn btn-danger">Excluir</button>
-               
-            </form>
+    
+     <div class="section section-danger text-justify">
+      <div class="container">
+        <div class="row text-center">
+          <div class="col-md-12 text-center">
+            <h1 class="text-center">${mensagem}</h1>
+            <table align="center" border="1">
+            	<tr>
+            		<th>CPF</th>
+            		<th>NOME</th>
+            		<th>EMAIL</th>
+            	</tr>
+            	<c:forEach var="row" items="${clientes}">
+            		<tr>
+            			<td><c:out value="${row.cpf}" /></td>
+            			<td><c:out value="${row.nome}" /></td>
+            			<td><c:out value="${row.email}" /></td>           	
+            		</tr>
+            	</c:forEach>
+            </table>
           </div>
         </div>
       </div>
     </div>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+           <a class="btn btn-default" href="javascript:window.history.go(-1)">Voltar</a>
+          </div>
+        </div>
+      </div>
+    </div> 
     <footer>
       <div class="navbar navbar-fixed-bottom bgred">
         <div class="container">
@@ -53,15 +68,4 @@
         </div>
       </div>
     </footer>
-    <div class="section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 text-center corrigir">
-            <a class="btn btn-default" href="javascript:window.history.go(-1)">Voltar</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-
 </body></html>

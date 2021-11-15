@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +20,8 @@ import javax.servlet.http.HttpSession;
 
 import com.abctreinamentos.Cliente;
 import com.abctreinamentos.Curso;
+import com.abctreinamentos.Pagamento;
+import com.abctreinamentos.PagamentoId;
 
 @WebServlet("/Controlador")
 public class Controlador extends HttpServlet {
@@ -31,6 +35,12 @@ public class Controlador extends HttpServlet {
 		super();
 
 	}
+	@Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+    		throws ServletException, IOException {
+    	this.doPost(req, resp);
+    }	
+	
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
@@ -57,13 +67,14 @@ public class Controlador extends HttpServlet {
 		switch(tipoformulario)
 			{	
 			case 11: //Consultar Todos
-			{/*
-				System.out.println("[1] Consultar Todos");
-				TypedQuery<Cliente> query = em.createQuery(""
-						+ "Select c from Cliente c",Cliente.class);
-				List<Cliente> clientes = query.getResultList();
-				clientes.forEach(System.out::println);
-				break;*/
+			{
+				
+			TypedQuery<Cliente> query = em.createQuery("Select c from Cliente c",Cliente.class);
+			List<Cliente> clientes = query.getResultList();
+			session.setAttribute("mensagem", "Total de Cliente(s): "+clientes.size());
+			session.setAttribute("clientes",clientes);					
+			response.sendRedirect("clientes/consultaTodos.jsp");
+				break;
 			}
 			case 12: //Consultar
 			{
@@ -163,14 +174,13 @@ public class Controlador extends HttpServlet {
 			{
 				case 21: //Consultar Todos
 				{
-					/*
-				}
-					System.out.println("[1] Consultar Todos");
 					TypedQuery<Curso> query = em.createQuery(""
 							+ "Select c from Curso c",Curso.class);
 					List<Curso> cursos = query.getResultList();
-					cursos.forEach(System.out::println);
-					break;*/
+					session.setAttribute("mensagem", "Total de Curso(s): "+cursos.size());
+					session.setAttribute("cursos",cursos);					
+					response.sendRedirect("cursos/consultaTodos.jsp");
+					break;
 				}
 				case 22: //Consultar
 				{
@@ -266,13 +276,13 @@ public class Controlador extends HttpServlet {
 			{
 				case 31: //Consultar Todos
 				{
-					/*
-					System.out.println("[1] Consultar Todos");
 					TypedQuery<Pagamento> query = em.createQuery(""
 							+ "Select p from Pagamento p",Pagamento.class);
 					List<Pagamento> pagamentos = query.getResultList();
-					pagamentos.forEach(System.out::println);
-					break;*/
+					session.setAttribute("mensagem", "Total de Pagamento(s): "+pagamentos.size());
+					session.setAttribute("pagamentos",pagamentos);					
+					response.sendRedirect("pagamentos/consultaTodos.jsp");
+					break;
 				}
 				case 32: //Consultar
 				{
@@ -281,12 +291,21 @@ public class Controlador extends HttpServlet {
 					cpfmascara = cpfmascara.replaceAll("[.-]", "");
 					cpf = Long.parseLong(cpfmascara);
 					cdcurso = Long.parseLong(request.getParameter("cdcurso"));
-					out.println("<h2> Consultar => Pagamento => </h2>"+cdcurso+ " - "+cpf);
 					
-					/*
-					PagamentoId pgtoid = new PagamentoId(cpf, cdcurso);
-					Pagamento pagamento = em.find(Pagamento.class,pgtoid);
-					System.out.println(pagamento);*/
+					PagamentoId pgtId = new PagamentoId(cpf, cdcurso);
+					Pagamento pagamento = em.find(Pagamento.class, pgtId);
+					
+					if(pagamento != null) 
+					{
+						session.setAttribute("mensagem", "Pagamento: do cpf: "+cpf+", Cod curso:"+cdcurso+" Encontrado");
+						session.setAttribute("Pagamento", pagamento);
+					}
+					else
+					{
+						session.setAttribute("mensagem", "Pagamento: do cpf: "+cpf+", Cod curso:"+cdcurso+" Não Encontrado");
+						session.setAttribute("pagamento", null);
+					}
+					response.sendRedirect("pagamentos/resultado.jsp");
 					break;						
 				}
 				case 33: //Cadastrar 
@@ -297,18 +316,20 @@ public class Controlador extends HttpServlet {
 					cpf = Long.parseLong(cpfmascara);
 					cdcurso = Long.parseLong(request.getParameter("cdcurso"));
 					
-					//PagamentoId pgtoid = new PagamentoId(cpf, cdcurso);
-					
 					datainscricao = request.getParameter("datainscricao");
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 					LocalDate date = LocalDate.parse(datainscricao, formatter);
 					DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-					out.println("<h2> cadastrar => Pagamento => </h2>"+cpf+ " - "+cdcurso+ " - "+fmt.format(date));
 					
-					/*Pagamento pagamento = new Pagamento(pgtoid,datainscricao);
+					PagamentoId pgtoid = new PagamentoId(cpf, cdcurso);
+					Pagamento pagamento = new Pagamento(pgtoid,fmt.format(date));
 					tx.begin();
-					em.persist(pagamento);
-					tx.commit();*/
+					em.merge(pagamento);
+					tx.commit();
+					
+					session.setAttribute("mensagem", "Pagamento: do cpf: "+cpf+", Cod curso:"+cdcurso+" Cadastrado!");
+					session.setAttribute("pagamento", pagamento);
+					response.sendRedirect("pagamentos/resultado.jsp");
 					break;					
 				}
 				case 34: //Alterar
@@ -317,16 +338,41 @@ public class Controlador extends HttpServlet {
 					cpfmascara = cpfmascara.replaceAll("[.-]", "");
 					cpf = Long.parseLong(cpfmascara);
 					cdcurso = Long.parseLong(request.getParameter("cdcurso"));
-					//PagamentoId pgtoid = new PagamentoId(cpf, cdcurso);
+					PagamentoId pgtoid = new PagamentoId(cpf, cdcurso);
 					datainscricao = request.getParameter("datainscricao");
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 					LocalDate date = LocalDate.parse(datainscricao, formatter);
 					DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-					out.println("<h2> Alterarr => Pagamento => </h2>"+cpf+ " - "+cdcurso+ " - "+fmt.format(date));
-					/*Pagamento pagamento = new Pagamento(pgtoid,datainscricao);
-					tx.begin();
-					em.merge(pagamento);
-					tx.commit();*/
+					
+					
+					PagamentoId pgtId = new PagamentoId(cpf, cdcurso);
+					Pagamento pagamento = new Pagamento(pgtoid,datainscricao);
+					pagamento = em.find(Pagamento.class, pgtId);
+					
+					
+					
+					if(pagamento != null) 
+					{
+						pagamento = new Pagamento(pgtoid,fmt.format(date));
+						tx.begin();
+						em.merge(pagamento);
+						tx.commit();
+						
+						session.setAttribute("mensagem", "Pagamento: do cpf: "+cpf+", Cod curso:"+cdcurso+" Alterado!");
+						session.setAttribute("pagamento",pagamento);
+					}
+					else 
+					{
+						session.setAttribute("mensagem", "Pagamento: do cpf: "+cpf+", Cod curso:"+cdcurso+" Não Encontrado. Alteração Cancelada!");
+						session.setAttribute("pagamento",null);					
+					}
+					response.sendRedirect("pagamentos/resultado.jsp");
+					
+					
+					
+					
+					
+					
 					break;
 				}
 				case 35: //Excluir
@@ -335,13 +381,22 @@ public class Controlador extends HttpServlet {
 					cpfmascara = cpfmascara.replaceAll("[.-]", "");
 					cpf = Long.parseLong(cpfmascara);
 					cdcurso = Long.parseLong(request.getParameter("cdcurso"));
-					out.println("<h2> Excluir => Pagamento => </h2>"+cdcurso+ " - "+cpf);
-					/*
+					
+					
 					PagamentoId pgtoid = new PagamentoId(cpf, cdcurso);
 					Pagamento pagamento = em.find(Pagamento.class,pgtoid);
-					tx.begin();
-					em.remove(pagamento);
-					tx.commit();*/
+					if(pagamento != null) 
+					{
+						tx.begin();
+						em.remove(pagamento);
+						tx.commit();
+						session.setAttribute("mensagem", "Pagamento: do cpf: "+cpf+", Cod curso:"+cdcurso+" Excluido!");
+						
+					}
+					else
+						session.setAttribute("mensagem", "Pagamento: do cpf: "+cpf+", Cod curso:"+cdcurso+" Não Encontrado Exclusão cancelada!");
+						session.setAttribute("pagamento", null);
+						response.sendRedirect("pagamentos/resultado.jsp");
 					break;						
 				}
 			}
