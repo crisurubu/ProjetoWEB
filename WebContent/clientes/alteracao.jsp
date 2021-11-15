@@ -48,7 +48,7 @@
                   <label for="inputEMAIL" class="control-label">Informar o EMAIL:</label>
                 </div>
                 <div class="col-sm-10">
-                  <input type="email" class="form-control" id="inputEMAIL" placeholder="E-mail" required>
+                  <input type="email" name="email" class="form-control" id="inputEMAIL" placeholder="E-mail" required>
                 </div>
               </div>
               	  <input type="hidden" name="idformulario" value="1">
@@ -73,7 +73,7 @@
       <div class="navbar navbar-fixed-bottom bgred">
         <div class="container">
           <div class="row">
-            <div class="col-sm-12 text-center" style="top:13px;color:#fff;">Â© ABCTreinamentos - Curso de Java 8 para Web</div>
+            <div class="col-sm-12 text-center" style="top:13px;color:#fff;">© ABCTreinamentos - Curso de Java 8 para Web</div>
           </div>
         </div>
       </div>

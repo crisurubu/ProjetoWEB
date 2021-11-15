@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="../util/topo.jsp" />
 <html><head>
     <meta charset="utf-8">
@@ -7,6 +8,7 @@
     <link href="../lib/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="../lib/css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="../lib/css/padrao.css" rel="stylesheet" type="text/css">
+  	<title>Página de Sucesso</title>
   </head><body>
     <div class="section section-danger text-justify">
       <div class="container">
@@ -17,32 +19,29 @@
         </div>
       </div>
     </div>
-    <div class="section">
+     <div class="section section-danger text-justify">
       <div class="container">
-        <div class="row">
+        <div class="row text-center">
           <div class="col-md-12 text-center">
-            <h3 class="tt_menu">&gt;&gt; CURSOS - CONSULTAR UM CURSO &lt;&lt;</h3>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <form class="form-horizontal" role="form" action="http://localhost/ProjetoWEB/Controlador" method="post">
-              <div class="form-group">
-                <div class="col-sm-2">
-                  <label for="inputEmail3" class="control-label">Informar o CURSO:</label>
-                </div>
-                <div class="col-sm-10">
-                  <input type="number" name="cdcurso" class="form-control" id="inputEmail3" placeholder="CURSO" required>
-                </div>
-              </div>
-              <input type="hidden" name="idformulario" value="2">
-              <input type="hidden" name="tipoformulario" value="22">
-              <button type="submit" class="btn btn-danger">Consultar</button>              
-            </form>
+            <h1 class="text-center">${mensagem}</h1>
+            <c:if test="${cliente != null}">
+            	<h3 class="text-center">Cpf:${cliente.cpf}</h3>
+            	<h3 class="text-center">Nome:${cliente.nome}</h3>
+            	<h3 class="text-center">Email:${cliente.email}</h3>
+            </c:if>
           </div>
         </div>
       </div>
     </div>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+           <a class="btn btn-default" href="index.jsp">Retornar ao Menu Cliente</a>
+          </div>
+        </div>
+      </div>
+    </div> 
     <footer>
       <div class="navbar navbar-fixed-bottom bgred">
         <div class="container">
@@ -52,15 +51,4 @@
         </div>
       </div>
     </footer>
-    <div class="section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 text-center corrigir">
-            <a class="btn btn-default" href="javascript:window.history.go(-1)">Voltar</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-
 </body></html>

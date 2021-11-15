@@ -5,16 +5,28 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.abctreinamentos.Cliente;
+import com.abctreinamentos.Curso;
 
 @WebServlet("/Controlador")
 public class Controlador extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAApp");
+	EntityManager em = emf.createEntityManager();
+	
+	
+	
 	public Controlador() {
 		super();
 
@@ -27,12 +39,19 @@ public class Controlador extends HttpServlet {
 		int idformulario;
 		int tipoformulario;
 		
+		String cpfmascara , nome, email;
+		
+		long cpf , cdcurso , valor;
+		String nomeCurso, valorCurso, url, datainscricao;
+		
+		
 		idformulario    = Integer.parseInt(request.getParameter("idformulario"));
 		tipoformulario  = Integer.parseInt(request.getParameter("tipoformulario"));
+		EntityTransaction tx = em.getTransaction();
+		HttpSession session = request.getSession();
 		
-		String cpfmascara , nome, email;
-		long cpf , cdcurso;
-		String nomeCurso, valor, url, datainscricao;
+		
+		
 		
 		if(idformulario == 1) {
 		switch(tipoformulario)
@@ -52,9 +71,19 @@ public class Controlador extends HttpServlet {
 				cpfmascara = request.getParameter("cpf");
 				cpfmascara = cpfmascara.replaceAll("[.-]", "");
 				cpf = Long.parseLong(cpfmascara);
-				out.println("<h2>Cliente => consultar => </h2>"+cpf);
-				//Cliente cliente = em.find(Cliente.class,cpf);
+				Cliente cliente = em.find(Cliente.class,cpf);
 				
+				if(cliente != null) 
+				{
+					session.setAttribute("mensagem", "Cliente: "+cpf+" Encontrado");
+					session.setAttribute("cliente", cliente);
+				}
+				else
+				{
+					session.setAttribute("mensagem", "Cliente: "+cpf+" Não Encontrado");
+					session.setAttribute("cliente", null);
+				}
+				response.sendRedirect("clientes/resultado.jsp");
 				break;						
 			}
 			case 13: //Cadastrar 
@@ -64,27 +93,42 @@ public class Controlador extends HttpServlet {
 				cpf = Long.parseLong(cpfmascara);
 				nome = request.getParameter("nome");
 				email = request.getParameter("email");
-				out.println("<h2>Cliente => Cadastrar => </h2>"+cpf+" - "+nome+" - "+email);
 				
-				/*
 				Cliente cliente = new Cliente(cpf,nome,email);
 				tx.begin();
 				em.persist(cliente);
-				tx.commit();	*/					
+				tx.commit();	
+				session.setAttribute("mensagem", "Cliente: "+cpf+" Cadastrado!");
+				session.setAttribute("cliente", cliente);
+				response.sendRedirect("clientes/resultado.jsp");
 				break;					
 			}
 			case 14: //Alterar
 			{
 				cpfmascara = request.getParameter("cpf");
-				cpfmascara = cpfmascara.replaceAll("[.-]", "");
+				cpfmascara = cpfmascara.replaceAll("[.-]","");
 				cpf = Long.parseLong(cpfmascara);
 				nome = request.getParameter("nome");
 				email = request.getParameter("email");
-				out.println("<h2>Cliente => Alterar => </h2>"+cpf+" - "+nome+" - "+email);
-				/*Cliente cliente = new Cliente(cpf,nome,email);
-				tx.begin();
-				em.merge(cliente);
-				tx.commit();*/						
+				
+				Cliente cliente = em.find(Cliente.class,cpf);
+				
+				if(cliente != null) //cliente encontrado
+				{
+					cliente = new Cliente(cpf,nome,email);
+					tx.begin();
+					em.merge(cliente);
+					tx.commit();
+					
+					session.setAttribute("mensagem", "Cliente "+cpf+" Alterado!");
+					session.setAttribute("cliente",cliente);
+				}
+				else //cliente não existe
+				{
+					session.setAttribute("mensagem", "Cliente "+cpf+" Não Encontrado. Alteração Cancelada!");
+					session.setAttribute("cliente",null);					
+				}
+				response.sendRedirect("clientes/resultado.jsp");				
 				break;
 			}
 			case 15: //Excluir
@@ -93,16 +137,25 @@ public class Controlador extends HttpServlet {
 				cpfmascara = request.getParameter("cpf");
 				cpfmascara = cpfmascara.replaceAll("[.-]", "");
 				cpf = Long.parseLong(cpfmascara);
-				out.println("<h2>Cliente => excluir => </h2>"+cpf);
-				/*Cliente cliente = em.find(Cliente.class,cpf);
-				tx.begin();
-				em.remove(cliente);
-				tx.commit();*/						
+				Cliente cliente = em.find(Cliente.class,cpf);
+				
+				if(cliente != null) 
+				{
+					tx.begin();
+					em.remove(cliente);
+					tx.commit();
+					session.setAttribute("mensagem", "Cliente: "+cpf+" Excluido!");
+					
+				}
+				else
+					session.setAttribute("mensagem", "Cliente: "+cpf+" Não Encontrado Exclusão cancelada!");
+					session.setAttribute("cliente", null);
+					response.sendRedirect("clientes/resultado.jsp");
 				break;						
 			 }
 			
 			
-			}
+		   }
 		}
 		else if(idformulario ==2) {
 			
@@ -125,9 +178,18 @@ public class Controlador extends HttpServlet {
 
 
 					cdcurso = Long.parseLong(request.getParameter("cdcurso"));
-					out.println("<h2>Curso => consultar curso especifico => </h2>"+cdcurso);
-					/*Curso curso = em.find(Curso.class,cdcurso);
-					System.out.println(curso);*/
+					Curso curso = em.find(Curso.class,cdcurso);
+					if(curso != null) 
+					{
+						session.setAttribute("mensagem", "Curso: "+cdcurso+" Encontrado");
+						session.setAttribute("cliente", curso);
+					}
+					else
+					{
+						session.setAttribute("mensagem", "Curso: "+cdcurso+" Não Encontrado");
+						session.setAttribute("curso", null);
+					}
+					response.sendRedirect("cursos/resultado.jsp");
 					break;						
 				}
 				case 23: //Cadastrar 
@@ -135,38 +197,63 @@ public class Controlador extends HttpServlet {
 					
 					cdcurso = Long.parseLong(request.getParameter("cdcurso"));
 					nomeCurso = request.getParameter("nome");
-					valor     = request.getParameter("valor");
-					url       = request.getParameter("site");
-					out.println("<h2>Curso => Cadastrar curso => </h2>"+cdcurso+ " - "+nomeCurso+" - "+valor+" - "+url);
+					valorCurso = request.getParameter("valor");
+					url   = request.getParameter("site");
+					valor = Long.parseLong(valorCurso);
 					
-					/*Curso curso = new Curso(cdcurso,nome,valor,url);
+					Curso curso = new Curso(cdcurso,nomeCurso,valor,url);
 					tx.begin();
 					em.persist(curso);
-					tx.commit();*/
+					tx.commit();	
+					session.setAttribute("mensagem", "Curso: "+cdcurso+" Cadastrado!");
+					session.setAttribute("curso", curso);
+					response.sendRedirect("cursos/resultado.jsp");
 					break;					
 				}
 				case 24: //Alterar
 				{
 					cdcurso = Long.parseLong(request.getParameter("cdcurso"));
 					nomeCurso = request.getParameter("nome");
-					valor     = request.getParameter("valor");
+					valorCurso     = request.getParameter("valor");
 					url       = request.getParameter("site");
-					out.println("<h2>Curso => Alterar curso => </h2>"+cdcurso+ " - "+nomeCurso+" - "+valor+" - "+url);
-					/*
-					Curso curso = new Curso(cdcurso,nome,valor,url);
-					tx.begin();
-					em.merge(curso);
-					tx.commit();*/
+					valor = Long.parseLong(valorCurso);
+					
+					Curso curso = em.find(Curso.class,cdcurso);
+					
+					if(curso != null) 
+					{
+						curso = new Curso(cdcurso,nomeCurso,valor,url);
+						tx.begin();
+						em.merge(curso);
+						tx.commit();
+						
+						session.setAttribute("mensagem", "Curso "+cdcurso+" Alterado!");
+						session.setAttribute("curso",curso);
+					}
+					else 
+					{
+						session.setAttribute("mensagem", "Curso "+cdcurso+" Não Encontrado. Alteração Cancelada!");
+						session.setAttribute("curso",null);					
+					}
+					response.sendRedirect("cursos/resultado.jsp");
 					break;
 				}
 				case 25: //Excluir
 				{
 					cdcurso = Long.parseLong(request.getParameter("cdcurso"));
-					out.println("<h2>Curso => excluir curso especifico => </h2>"+cdcurso);
-					/*
-					tx.begin();
-					em.remove(curso);
-					tx.commit();	//*/
+					Curso curso = em.find(Curso.class,cdcurso);
+					if(curso != null) 
+					{
+						tx.begin();
+						em.remove(curso);
+						tx.commit();
+						session.setAttribute("mensagem", "Curso: "+cdcurso+" Excluido!");
+						
+					}
+					else
+						session.setAttribute("mensagem", "Curso: "+cdcurso+" Não Encontrado Exclusão cancelada!");
+						session.setAttribute("curso", null);
+						response.sendRedirect("cursos/resultado.jsp");
 					break;						
 				}
 			

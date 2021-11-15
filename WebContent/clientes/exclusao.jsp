@@ -29,7 +29,7 @@
             <form class="form-horizontal" role="form" action="http://localhost/ProjetoWEB/Controlador" method="post">
               <div class="form-group">
                 <div class="col-sm-3">
-                  <label for="inputCPF" class="control-label">Informar o CPF a ser EXCLUÍDO:</label>
+                  <label for="inputCPF" class="control-label">Informar o CPF a ser Excluido:</label>
                 </div>
                 <div class="col-sm-9">
                   <input type="text" name="cpf" class="form-control" id="inputCPF" placeholder="CPF" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Digite um CPF no formato: xxx.xxx.xxx-xx" required>
